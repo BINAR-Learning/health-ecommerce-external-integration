@@ -23,7 +23,7 @@ const aiLimiter = rateLimit({
 });
 
 // AI Chatbot
-router.post("/ai/ask", authenticateToken, aiLimiter, aiController.askAI);
+router.post("/ai/ask", aiLimiter, aiController.askAI);
 
 // Kemenkes API
 router.get("/kemenkes/medications", authenticateToken, async (req, res) => {

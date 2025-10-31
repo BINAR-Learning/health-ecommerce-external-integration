@@ -6,23 +6,33 @@
  * dengan menambahkan AI-powered product recommendations
  */
 
-const axios = require("axios");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 const Product = require("../models/Product");
 
 class AIService {
   constructor() {
     this.apiKey = process.env.GOOGLE_AI_API_KEY;
-    this.geminiURL =
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
+    this.modelName = process.env.GOOGLE_AI_MODEL || "gemini-2.5-flash"; // Use a valid model from your list
     this.cache = new Map();
     this.CACHE_TTL = 60 * 60 * 1000; // 1 hour
 
     if (!this.apiKey) {
       console.warn("⚠️  GOOGLE_AI_API_KEY not set. AI features will not work.");
+      this.genAI = null;
+    } else {
+      this.genAI = new GoogleGenerativeAI(this.apiKey);
     }
   }
 
   async getHealthRecommendation(userQuestion) {
+    if (!this.genAI) {
+      return {
+        success: false,
+        message: "AI service is not configured.",
+        fallback: "Please contact support.",
+      };
+    }
+
     try {
       // Check cache first
       const cacheKey = userQuestion.toLowerCase().trim();
@@ -74,27 +84,11 @@ INSTRUKSI:
 
 JAWABAN:`;
 
-      // Call Gemini API
-      const response = await axios.post(
-        `${this.geminiURL}?key=${this.apiKey}`,
-        {
-          contents: [
-            {
-              parts: [{ text: prompt }],
-            },
-          ],
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 500,
-          },
-        },
-        {
-          headers: { "Content-Type": "application/json" },
-          timeout: 30000,
-        }
-      );
-
-      const aiAnswer = response.data.candidates[0].content.parts[0].text;
+      // Call Gemini API using the SDK
+      const model = this.genAI.getGenerativeModel({ model: this.modelName });
+      const sdkResult = await model.generateContent(prompt);
+      const response = await sdkResult.response;
+      const aiAnswer = response.text();
 
       // Extract mentioned products
       const recommendations = this.extractRecommendations(aiAnswer, products);
