@@ -72,6 +72,44 @@ db.products.insertOne({
 exit
 ```
 
+**Atau gunakan seeder (lebih mudah):**
+
+```bash
+# Jalankan seeder untuk membuat products dan users lengkap
+npm run seed
+```
+
+**Seeder akan membuat:**
+
+- ✅ **37 Products** - Lengkap dengan berbagai kategori:
+  - 9 Vitamins (Vitamin C, D3, B Complex, Multivitamin, dll)
+  - 8 Supplements (Omega-3, Probiotik, Collagen, Magnesium, dll)
+  - 8 Medicines (Paracetamol, Amoxicillin, Ibuprofen, dll)
+  - 10 Medical Equipment (Thermometer, BP Monitor, Nebulizer, dll)
+
+- ✅ **17 Users** - Siap untuk login testing:
+  - **2 Admin Users**:
+    - `aiman@example.com` / `Aiman123!`
+    - `admin@healthstore.com` / `Admin123!`
+  - **15 Regular Users**:
+    - `aila@example.com` / `Aila123!`
+    - `user@example.com` / `User123!`
+    - `budi@example.com` / `Budi123!`
+    - ... dan lainnya
+
+**💡 Tips:**
+- Seeder akan **clear existing data** terlebih dahulu
+- Password sudah di-hash dengan bcrypt (aman)
+- Semua users memiliki phone dan address lengkap
+- Gunakan kredensial ini untuk testing login/authentication
+
+**Alternatif Seeder:**
+
+```bash
+# Seed hanya vitamins saja (tanpa clear data)
+npm run seed:vitamins
+```
+
 ### Step 4: Setup Environment Variables
 
 ```bash
@@ -121,7 +159,7 @@ MIDTRANS_IS_PRODUCTION=false
 5. Copy "Server Key" dan "Client Key"
 6. Paste ke `.env`
 
-### Step 5: Start Server
+### Step 6: Start Server
 
 ```bash
 # Jalankan server dalam development mode
@@ -137,7 +175,7 @@ npm run dev
 💻 Environment: development
 ```
 
-### Step 6: Test API
+### Step 7: Test API
 
 **Test health check:**
 ```bash
@@ -146,6 +184,17 @@ curl http://localhost:3000/health
 
 # Atau buka di browser:
 # http://localhost:3000/health
+```
+
+**Test Login (setelah seeding):**
+
+```bash
+# Login dengan user dari seeder
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"aila@example.com","password":"Aila123!"}'
+
+# Response akan memberikan JWT token untuk digunakan di request berikutnya
 ```
 
 **Expected Response:**
