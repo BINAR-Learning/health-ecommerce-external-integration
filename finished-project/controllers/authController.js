@@ -33,6 +33,17 @@ exports.register = async (req, res) => {
     // Generate token
     const token = generateToken(user._id, user.email, user.role);
 
+    // Log token info in development for debugging
+    if (process.env.NODE_ENV === "development") {
+      const tokenParts = token.split(".");
+      console.log("✅ Token generated successfully:", {
+        tokenLength: token.length,
+        tokenParts: tokenParts.length,
+        tokenPrefix: token.substring(0, 50) + "...",
+        hasThreeParts: tokenParts.length === 3,
+      });
+    }
+
     res.status(201).json({
       success: true,
       message: "User berhasil didaftarkan",
@@ -89,6 +100,17 @@ exports.login = async (req, res) => {
 
     // Generate token
     const token = generateToken(user._id, user.email, user.role);
+
+    // Log token info in development for debugging
+    if (process.env.NODE_ENV === "development") {
+      const tokenParts = token.split(".");
+      console.log("✅ Token generated successfully:", {
+        tokenLength: token.length,
+        tokenParts: tokenParts.length,
+        tokenPrefix: token.substring(0, 50) + "...",
+        hasThreeParts: tokenParts.length === 3,
+      });
+    }
 
     res.json({
       success: true,

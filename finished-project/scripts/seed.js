@@ -474,10 +474,15 @@ const seedDatabase = async () => {
     const createdProducts = await Product.insertMany(products);
     console.log(`✅ ${createdProducts.length} products created\n`);
 
-    // Insert users
+    // Insert users - Use create() instead of insertMany() to trigger password hashing
     console.log("👥 Creating users...");
-    const createdUsers = await User.insertMany(users);
-    console.log(`✅ ${createdUsers.length} users created\n`);
+    const createdUsers = [];
+    for (const userData of users) {
+      // User.create() will trigger pre-save hook to hash password automatically
+      const user = await User.create(userData);
+      createdUsers.push(user);
+    }
+    console.log(`✅ ${createdUsers.length} users created (passwords encrypted)\n`);
 
     // Display sample IDs
     console.log("📋 Sample Product IDs (for testing):");
@@ -491,7 +496,7 @@ const seedDatabase = async () => {
       .filter((u) => u.role === "admin")
       .forEach((user) => {
         const userData = users.find((u) => u.email === user.email);
-        console.log(`   - ${user.name} (${user.email}) / ${userData.password}`);
+        console.log(`   - ${user.name} (${user.email}) / Password: ${userData.password} (hashed in DB)`);
       });
 
     console.log("\n   👤 REGULAR USERS:");
@@ -500,7 +505,7 @@ const seedDatabase = async () => {
       .slice(0, 10)
       .forEach((user) => {
         const userData = users.find((u) => u.email === user.email);
-        console.log(`   - ${user.name} (${user.email}) / ${userData.password}`);
+        console.log(`   - ${user.name} (${user.email}) / Password: ${userData.password} (hashed in DB)`);
       });
     if (createdUsers.filter((u) => u.role === "user").length > 10) {
       console.log(`   ... and ${createdUsers.filter((u) => u.role === "user").length - 10} more users`);

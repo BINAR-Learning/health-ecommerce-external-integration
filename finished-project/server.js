@@ -10,6 +10,8 @@ const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const mongoSanitize = require("mongo-sanitize");
 const morgan = require("morgan");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
 
 const connectDB = require("./config/database");
 
@@ -59,12 +61,47 @@ const apiLimiter = rateLimit({
 });
 app.use("/api/", apiLimiter);
 
+// Swagger Documentation
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customCss: ".swagger-ui .topbar { display: none }",
+  customSiteTitle: "Health E-Commerce API Documentation",
+}));
+
 // Mount Routes (Complete API from Modul 1-5)
 app.use("/api/products", productRoutes);     // From Modul 3 (CRUD)
 app.use("/api/auth", authRoutes);            // From Modul 4 (Authentication)
 app.use("/api/external", externalRoutes);    // From Modul 5 (Integrations)
 
-// Health check
+/**
+ * @swagger
+ * /health:
+ *   get:
+ *     summary: Health check endpoint
+ *     description: Check if the API server is running and healthy
+ *     tags: [Health]
+ *     responses:
+ *       200:
+ *         description: Server is healthy
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Health E-Commerce API with External Integrations"
+ *                 features:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: ["AI Chatbot 🤖", "Kemenkes API 🏥", "Midtrans Payment 💳"]
+ *                 timestamp:
+ *                   type: string
+ *                   format: date-time
+ */
 app.get("/health", (req, res) => {
   res.json({
     success: true,
@@ -100,6 +137,9 @@ app.listen(PORT, () => {
   ║  🏥 HEALTH E-COMMERCE API - ULTIMATE BACKEND                  ║
   ║  📍 Port: ${PORT}                                                  ║
   ║                                                               ║
+  ║  📖 API Documentation (Swagger):                              ║
+  ║     📄 http://localhost:${PORT}/api-docs                          ║
+  ║                                                               ║
   ║  📦 Products API (Modul 3):                                   ║
   ║     GET    /api/products                                      ║
   ║     POST   /api/products (Admin)                              ║
@@ -117,5 +157,6 @@ app.listen(PORT, () => {
   ║  ✅ READY FOR FRONTEND INTEGRATION!                           ║
   ╚═══════════════════════════════════════════════════════════════╝
   `);
-  console.log(`\n🔗 Frontend should connect to: http://localhost:${PORT}\n`);
+  console.log(`\n🔗 Frontend should connect to: http://localhost:${PORT}`);
+  console.log(`📖 Swagger UI available at: http://localhost:${PORT}/api-docs\n`);
 });
