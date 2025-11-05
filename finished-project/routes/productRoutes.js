@@ -32,6 +32,24 @@ const { authorizeRole } = require("../middleware/authorize");
  *         schema:
  *           type: string
  *         description: Search by product name or description
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: number
+ *           default: 1
+ *         description: Page number (default 1)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: number
+ *           default: 12
+ *         description: Items per page (default 12)
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *           enum: [price-asc, price-desc, name-asc, name-desc, newest]
+ *         description: Sort order
  *     responses:
  *       200:
  *         description: List of products
@@ -45,7 +63,19 @@ const { authorizeRole } = require("../middleware/authorize");
  *                   example: true
  *                 count:
  *                   type: number
+ *                   example: 12
+ *                 total:
+ *                   type: number
  *                   example: 37
+ *                 page:
+ *                   type: number
+ *                   example: 1
+ *                 totalPages:
+ *                   type: number
+ *                   example: 4
+ *                 limit:
+ *                   type: number
+ *                   example: 12
  *                 data:
  *                   type: array
  *                   items:

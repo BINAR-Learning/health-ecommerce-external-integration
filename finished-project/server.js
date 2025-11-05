@@ -15,9 +15,11 @@ const swaggerSpec = require("./config/swagger");
 
 const connectDB = require("./config/database");
 
-// Import ALL routes (from Modul 3, 4, 5)
+// Import ALL routes (from Modul 3, 4, 5, 6)
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
+const cartRoutes = require("./routes/cartRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
 const externalRoutes = require("./routes/externalRoutes");
 
 const app = express();
@@ -67,9 +69,11 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   customSiteTitle: "Health E-Commerce API Documentation",
 }));
 
-// Mount Routes (Complete API from Modul 1-5)
+// Mount Routes (Complete API from Modul 1-6)
 app.use("/api/products", productRoutes);     // From Modul 3 (CRUD)
 app.use("/api/auth", authRoutes);            // From Modul 4 (Authentication)
+app.use("/api/cart", cartRoutes);            // From Modul 6 (User Cart)
+app.use("/api/upload", uploadRoutes);        // From Modul 6 (Cloudinary Upload)
 app.use("/api/external", externalRoutes);    // From Modul 5 (Integrations)
 
 /**

@@ -8,6 +8,7 @@ const router = express.Router();
 const aiController = require("../controllers/aiController");
 const kemenkesService = require("../services/kemenkesService");
 const midtransService = require("../services/midtransService");
+const emailService = require("../services/emailService");
 const { authenticateToken } = require("../middleware/auth");
 const { authorizeRole } = require("../middleware/authorize");
 const rateLimit = require("express-rate-limit");
@@ -221,8 +222,32 @@ router.post("/payment/create", authenticateToken, async (req, res) => {
  *                   type: string
  */
 router.post("/payment/webhook", async (req, res) => {
-  const result = midtransService.handleNotification(req.body);
-  res.json(result);
+  try {
+    console.log("🔔 Webhook received from Midtrans");
+
+    const result = midtransService.handleNotification(req.body);
+    
+    // Send email if payment successful
+    if (result.success && result.status === 'paid') {
+      console.log("💳 Payment successful, sending confirmation email...");
+      
+      const emailResult = await emailService.sendPaymentConfirmation({
+        orderId: result.orderId,
+        customerEmail: req.body.customer_details?.email || 'customer@example.com',
+        amount: result.grossAmount || req.body.gross_amount,
+        items: [],
+      });
+
+      if (emailResult.success) {
+        console.log("✅ Email sent successfully");
+      }
+    }
+    
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("❌ Webhook error:", error);
+    res.status(200).json({ success: false, message: error.message });
+  }
 });
 
 module.exports = router;

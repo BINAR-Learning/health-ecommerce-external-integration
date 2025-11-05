@@ -1,9 +1,9 @@
 const Product = require("../models/Product");
 
-// Get All Products
+// Get All Products with Pagination
 exports.getAllProducts = async (req, res) => {
   try {
-    const { category, minPrice, maxPrice, search } = req.query;
+    const { category, minPrice, maxPrice, search, page, limit, sort } = req.query;
 
     // Build query
     let query = { isActive: true };
@@ -28,14 +28,34 @@ exports.getAllProducts = async (req, res) => {
       ];
     }
 
-    // Fetch products
+    // Pagination
+    const pageNumber = parseInt(page) || 1;
+    const limitNumber = parseInt(limit) || 12;
+    const skip = (pageNumber - 1) * limitNumber;
+
+    // Sort options
+    let sortOption = { createdAt: -1 }; // Default: newest first
+    if (sort === 'price-asc') sortOption = { price: 1 };
+    if (sort === 'price-desc') sortOption = { price: -1 };
+    if (sort === 'name-asc') sortOption = { name: 1 };
+    if (sort === 'name-desc') sortOption = { name: -1 };
+
+    // Get total count for pagination
+    const totalProducts = await Product.countDocuments(query);
+
+    // Fetch products dengan pagination
     const products = await Product.find(query)
-      .sort({ createdAt: -1 })
-      .limit(100);
+      .sort(sortOption)
+      .skip(skip)
+      .limit(limitNumber);
 
     res.json({
       success: true,
       count: products.length,
+      total: totalProducts,
+      page: pageNumber,
+      totalPages: Math.ceil(totalProducts / limitNumber),
+      limit: limitNumber,
       data: products,
     });
   } catch (error) {
