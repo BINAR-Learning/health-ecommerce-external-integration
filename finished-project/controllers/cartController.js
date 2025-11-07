@@ -24,6 +24,12 @@ exports.getCart = async (req, res) => {
       });
     }
 
+    // Initialize cart if doesn't exist (for backward compatibility)
+    if (!user.cart) {
+      user.cart = [];
+      await user.save();
+    }
+
     // Filter out products that no longer exist or are inactive
     const validCart = user.cart.filter(item => 
       item.product && item.product.isActive
@@ -100,6 +106,18 @@ exports.addToCart = async (req, res) => {
     }
 
     const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Initialize cart if doesn't exist (for backward compatibility)
+    if (!user.cart) {
+      user.cart = [];
+    }
     
     // Check if product already in cart
     const existingItemIndex = user.cart.findIndex(
@@ -157,6 +175,19 @@ exports.updateCartItem = async (req, res) => {
     }
 
     const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Initialize cart if doesn't exist
+    if (!user.cart) {
+      user.cart = [];
+    }
+
     const cartItemIndex = user.cart.findIndex(
       item => item.product.toString() === productId
     );
@@ -202,6 +233,19 @@ exports.removeFromCart = async (req, res) => {
     const { productId } = req.params;
 
     const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Initialize cart if doesn't exist
+    if (!user.cart) {
+      user.cart = [];
+    }
+
     user.cart = user.cart.filter(
       item => item.product.toString() !== productId
     );
@@ -228,6 +272,14 @@ exports.removeFromCart = async (req, res) => {
 exports.clearCart = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
     user.cart = [];
     await user.save();
 

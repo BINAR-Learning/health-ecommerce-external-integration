@@ -21,6 +21,7 @@ const authRoutes = require("./routes/authRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 const externalRoutes = require("./routes/externalRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 const app = express();
 
@@ -75,6 +76,7 @@ app.use("/api/auth", authRoutes);            // From Modul 4 (Authentication)
 app.use("/api/cart", cartRoutes);            // From Modul 6 (User Cart)
 app.use("/api/upload", uploadRoutes);        // From Modul 6 (Cloudinary Upload)
 app.use("/api/external", externalRoutes);    // From Modul 5 (Integrations)
+app.use("/api/orders", orderRoutes);         // Order History API
 
 /**
  * @swagger
@@ -101,7 +103,7 @@ app.use("/api/external", externalRoutes);    // From Modul 5 (Integrations)
  *                   type: array
  *                   items:
  *                     type: string
- *                   example: ["AI Chatbot 🤖", "Kemenkes API 🏥", "Midtrans Payment 💳"]
+ *                   example: ["AI Chatbot", "Kemenkes API", "Midtrans Payment"]
  *                 timestamp:
  *                   type: string
  *                   format: date-time
@@ -110,7 +112,7 @@ app.get("/health", (req, res) => {
   res.json({
     success: true,
     message: "Health E-Commerce API with External Integrations",
-    features: ["AI Chatbot 🤖", "Kemenkes API 🏥", "Midtrans Payment 💳"],
+    features: ["AI Chatbot", "Kemenkes API", "Midtrans Payment"],
     timestamp: new Date().toISOString(),
   });
 });
@@ -138,29 +140,29 @@ const PORT = process.env.PORT || 5000;  // Port 5000 for Frontend integration!
 app.listen(PORT, () => {
   console.log(`
   ╔═══════════════════════════════════════════════════════════════╗
-  ║  🏥 HEALTH E-COMMERCE API - ULTIMATE BACKEND                  ║
-  ║  📍 Port: ${PORT}                                                  ║
+  ║  HEALTH E-COMMERCE API - ULTIMATE BACKEND                  ║
+  ║  Port: ${PORT}                                                  ║
   ║                                                               ║
-  ║  📖 API Documentation (Swagger):                              ║
-  ║     📄 http://localhost:${PORT}/api-docs                          ║
+  ║  API Documentation (Swagger):                              ║
+  ║     http://localhost:${PORT}/api-docs                          ║
   ║                                                               ║
-  ║  📦 Products API (Modul 3):                                   ║
+  ║  Products API (Modul 3):                                   ║
   ║     GET    /api/products                                      ║
   ║     POST   /api/products (Admin)                              ║
   ║                                                               ║
-  ║  🔐 Authentication (Modul 4):                                 ║
+  ║  Authentication (Modul 4):                                 ║
   ║     POST   /api/auth/register                                 ║
   ║     POST   /api/auth/login                                    ║
   ║     GET    /api/auth/profile                                  ║
   ║                                                               ║
-  ║  🤖 AI & Integrations (Modul 5):                              ║
+  ║  AI & Integrations (Modul 5):                              ║
   ║     POST   /api/external/ai/ask                               ║
   ║     GET    /api/external/kemenkes/medications                 ║
   ║     POST   /api/external/payment/create                       ║
   ║                                                               ║
-  ║  ✅ READY FOR FRONTEND INTEGRATION!                           ║
+  ║  READY FOR FRONTEND INTEGRATION!                           ║
   ╚═══════════════════════════════════════════════════════════════╝
   `);
-  console.log(`\n🔗 Frontend should connect to: http://localhost:${PORT}`);
-  console.log(`📖 Swagger UI available at: http://localhost:${PORT}/api-docs\n`);
+  console.log(`\nFrontend should connect to: http://localhost:${PORT}`);
+  console.log(`Swagger UI available at: http://localhost:${PORT}/api-docs\n`);
 });

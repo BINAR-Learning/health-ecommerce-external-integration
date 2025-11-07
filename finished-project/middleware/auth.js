@@ -38,6 +38,13 @@ function authenticateToken(req, res, next) {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
+    
+    // Ensure req.user.id is set (for backward compatibility)
+    // Token contains 'userId', but some code uses 'id'
+    if (decoded.userId && !decoded.id) {
+      req.user.id = decoded.userId;
+    }
+    
     next();
   } catch (error) {
     // Provide more specific error messages based on error type

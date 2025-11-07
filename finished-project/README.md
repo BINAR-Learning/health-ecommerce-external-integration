@@ -1,7 +1,7 @@
-# ✅ Health E-Commerce: ULTIMATE Backend (Complete)
+# Health E-Commerce: ULTIMATE Backend (Complete)
 
-> **🌟 THE COMPLETE BACKEND - Use this for ALL Frontend & Common Modules!**  
-> **Production-Ready dengan ALL Features dari Modul 1-5**
+> **THE COMPLETE BACKEND - Production-Ready dengan ALL Features dari Modul 1-6**  
+> **Use this for ALL Frontend & Common Modules!**
 
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-4.18-blue)](https://expressjs.com/)
@@ -9,75 +9,101 @@
 [![AI](https://img.shields.io/badge/Google-Gemini_AI-orange)](https://ai.google.dev/)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
-**Complete implementation** Health E-Commerce backend dengan integrasi Google Gemini AI, Kemenkes API, dan Midtrans Payment Gateway.
+**Complete implementation** Health E-Commerce backend dengan integrasi Google Gemini AI, Kemenkes API, Midtrans Payment Gateway, Cloudinary Image Upload, Shopping Cart, Order Management, dan Email Service.
 
 ---
 
-## 🎉 Apa yang Ada di Repo Ini?
-
-Repository ini adalah **ULTIMATE BACKEND** - kombinasi lengkap dari **SEMUA Backend Modul 1-5**!
-
-**🌟 INI ADALAH THE BACKEND yang akan digunakan untuk:**
-
-- ✅ **Frontend Modul 1-3** - React, Next.js, UI/UX
-- ✅ **Common Modul 1-2** - Testing, GitHub Workflow
-- ✅ **Final Project** - Complete MERN integration
-
-**Complete API Features (dari 5 Backend Modules):**
+## Complete Features
 
 ### From Modul 1-2: Database Layer
-
-- ✅ **Product Model** - Complete dengan validations
-- ✅ **User Model** - Dengan bcrypt hashing
-- ✅ **MongoDB Integration** - Ready to use
+- **Product Model** - Complete dengan validations
+- **User Model** - Dengan bcrypt hashing, cart, profilePhoto
+- **Order Model** - Order tracking dengan status
+- **MongoDB Integration** - Ready to use
 
 ### From Modul 3: REST API
+- **CRUD Products** - GET, POST, PUT, DELETE dengan filtering & search
+- **Middleware System** - CORS, logging, error handling
+- **Query Support** - Filter by category, price range, search, pagination
 
-- ✅ **CRUD Products** - GET, POST, PUT, DELETE dengan filtering & search
-- ✅ **Middleware System** - CORS, logging, error handling
-- ✅ **Query Support** - Filter by category, price range, search
-
-### From Modul 4: Security
-
-- ✅ **JWT Authentication** - Register, login, protected routes
-- ✅ **RBAC** - Admin vs User role-based access
-- ✅ **Password Hashing** - Bcrypt dengan salt rounds 10
-- ✅ **Security Headers** - Helmet, rate limiting, sanitization
+### From Modul 4: Security & Authentication
+- **JWT Authentication** - Register, login, protected routes
+- **RBAC** - Admin vs User role-based access
+- **Password Hashing** - Bcrypt dengan salt rounds 10
+- **Security Headers** - Helmet, rate limiting, sanitization
 
 ### From Modul 5: External Integrations
+- **AI Chatbot** - Google Gemini untuk health recommendations (with caching!)
+- **Kemenkes API** - Official government health data
+- **Midtrans Payment** - Payment gateway dengan webhook handling
+- **Email Service** - Auto-send payment confirmations
 
-- ✅ **AI Chatbot** - Google Gemini untuk health recommendations (with caching!)
-- ✅ **Kemenkes API** - Official government health data
-- ✅ **Midtrans Payment** - Payment gateway dengan webhook handling
-- ✅ **Email Service** - Auto-send notifications
-- ✅ **Advanced Features** - Retry logic, rate limiting, signature verification
+### From Modul 6: Advanced Features
+- **Shopping Cart API** - User-specific cart dengan database sync
+- **Order Management** - Order history, order detail, status tracking
+- **Cloudinary Integration** - Product images & profile photos
+- **Image Upload** - Multer + Cloudinary dengan optimization
 
 ---
 
-## 🚀 Quick Start (Untuk Newbie)
+## Quick Start
 
-### Step 1: Clone Repository
-
-```bash
-# Clone repository ini
-git clone https://github.com/your-username/health-ecommerce-ai-complete.git
-
-# Masuk ke folder project
-cd health-ecommerce-ai-complete
-```
-
-### Step 2: Install Dependencies
+### Step 1: Install Dependencies
 
 ```bash
-# Install semua package yang dibutuhkan
 npm install
-
-# Tunggu sampai selesai (biasanya 1-2 menit)
 ```
 
-### Step 3: Setup Database
+### Step 2: Setup Environment Variables
 
-**Start MongoDB:**
+```bash
+# Copy .env.example (jika ada) atau buat .env baru
+# Windows PowerShell:
+Copy-Item .env.example .env
+
+# Mac/Linux:
+cp .env.example .env
+```
+
+**Edit file `.env`:**
+
+```env
+# === Server Configuration ===
+NODE_ENV=development
+PORT=5000
+
+# === Database ===
+MONGODB_URI=mongodb://localhost:27017/health-ecommerce
+
+# === JWT ===
+JWT_SECRET=your-super-secret-jwt-key-change-in-production
+JWT_EXPIRES_IN=24h
+
+# === Google Gemini AI ===
+GOOGLE_AI_API_KEY=AIza...your-key-here
+
+# === Kemenkes API (Optional) ===
+KEMENKES_API_URL=https://api-satusehat-dev.dto.kemkes.go.id/fhir-r4/v1
+KEMENKES_API_KEY=your-kemenkes-key
+
+# === Midtrans Payment ===
+MIDTRANS_SERVER_KEY=SB-Mid-server-...
+MIDTRANS_CLIENT_KEY=SB-Mid-client-...
+MIDTRANS_IS_PRODUCTION=false
+
+# === Cloudinary (Image Upload) ===
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+
+# === Email Service (Optional) ===
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+```
+
+### Step 3: Start MongoDB
 
 ```bash
 # Check apakah MongoDB running
@@ -89,593 +115,459 @@ mongosh
 # Linux: sudo systemctl start mongod
 ```
 
-**Database akan auto-create saat server pertama kali running.**
-
-### Step 4: Seed Database (Populate Sample Data)
-
-**Sebelum testing API, isi database dengan sample data untuk testing:**
+### Step 4: Seed Database
 
 ```bash
-# Jalankan seeder untuk membuat products dan users
 npm run seed
 ```
 
 **Seeder akan membuat:**
+- **37 Products** (Vitamins, Supplements, Medicines, Medical Equipment)
+- **17 Users** (2 Admin, 15 Regular Users)
 
-- ✅ **37 Products** - Lengkap dengan berbagai kategori:
+**Test Users:**
+- **Admin:** `aiman@example.com` / `Aiman123!`
+- **User:** `aila@example.com` / `Aila123!`
 
-  - 9 Vitamins (Vitamin C, D3, B Complex, Multivitamin, dll)
-  - 8 Supplements (Omega-3, Probiotik, Collagen, Magnesium, dll)
-  - 8 Medicines (Paracetamol, Amoxicillin, Ibuprofen, dll)
-  - 10 Medical Equipment (Thermometer, BP Monitor, Nebulizer, dll)
-
-- ✅ **17 Users** - Siap untuk login testing:
-  - **2 Admin Users**:
-    - `aiman@example.com` / `Aiman123!`
-    - `admin@healthstore.com` / `Admin123!`
-  - **15 Regular Users**:
-    - `aila@example.com` / `Aila123!`
-    - `user@example.com` / `User123!`
-    - `budi@example.com` / `Budi123!`
-    - `siti@example.com` / `Siti123!`
-    - `andi@example.com` / `Andi123!`
-    - `rina@example.com` / `Rina123!`
-    - `dedi@example.com` / `Dedi123!`
-    - `lisa@example.com` / `Lisa123!`
-    - `fajar@example.com` / `Fajar123!`
-    - `maya@example.com` / `Maya123!`
-    - `eko@example.com` / `Eko123!`
-    - `indah@example.com` / `Indah123!`
-    - `hadi@example.com` / `Hadi123!`
-    - `citra@example.com` / `Citra123!`
-    - ... dan lainnya
-
-**Expected Output:**
-
-```
-🗑️  Clearing old data...
-✅ Old data cleared
-
-📦 Creating products...
-✅ 37 products created
-
-👥 Creating users...
-✅ 17 users created
-
-📋 Test Users for Login:
-
-   🔐 ADMIN USERS:
-   - Aiman (aiman@example.com) / Aiman123!
-   - Admin Health (admin@healthstore.com) / Admin123!
-
-   👤 REGULAR USERS:
-   - Aila (aila@example.com) / Aila123!
-   - User Test (user@example.com) / User123!
-   ... and 13 more users
-
-📊 Summary:
-   ✅ 37 products created
-   ✅ 17 users created
-      - 2 admin users
-      - 15 regular users
-
-🎉 Database seeding complete!
-```
-
-**💡 Tips:**
-
-- Seeder akan **clear existing data** terlebih dahulu
-- Password sudah di-hash dengan bcrypt (aman)
-- Semua users memiliki phone dan address lengkap
-- Gunakan kredensial ini untuk testing login/authentication
-
-**Alternatif Seeder:**
+### Step 5: Start Server
 
 ```bash
-# Seed hanya vitamins saja (tanpa clear data)
-npm run seed:vitamins
-```
-
-### Step 5: Setup Environment Variables
-
-```bash
-# Copy file .env.example jadi .env
-cp .env.example .env
-
-# Windows (PowerShell):
-Copy-Item .env.example .env
-```
-
-**Edit file `.env` dengan API keys kamu:**
-
-```env
-# === Server Configuration ===
-NODE_ENV=development
-PORT=3000
-
-# === Database (dari Modul 2) ===
-MONGODB_URI=mongodb://localhost:27017/health-ecommerce
-
-# === JWT (dari Modul 4) ===
-JWT_SECRET=your-super-secret-jwt-key-change-in-production
-JWT_EXPIRES_IN=24h
-
-# === Google Gemini AI (GRATIS!) ===
-# Get from: https://ai.google.dev/
-GOOGLE_AI_API_KEY=AIza...your-key-here
-
-# === Kemenkes API (Optional) ===
-KEMENKES_API_URL=https://api-satusehat-dev.dto.kemkes.go.id/fhir-r4/v1
-KEMENKES_API_KEY=your-kemenkes-key
-
-# === Midtrans Payment (Sandbox - GRATIS!) ===
-# Get from: https://dashboard.sandbox.midtrans.com/
-MIDTRANS_SERVER_KEY=SB-Mid-server-...
-MIDTRANS_CLIENT_KEY=SB-Mid-client-...
-MIDTRANS_IS_PRODUCTION=false
-
-# === Email (Optional) ===
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
-```
-
-**💡 Get API Keys (5-10 menit):**
-
-**Google Gemini:**
-
-1. → https://ai.google.dev/
-2. Click "Get API Key"
-3. Sign in dengan Google
-4. Create project & generate key
-5. Copy & paste to `.env`
-
-**Midtrans Sandbox:**
-
-1. → https://dashboard.sandbox.midtrans.com/
-2. Register & verify email
-3. Login → Settings → Access Keys
-4. Copy Server Key & Client Key
-5. Paste to `.env`
-
-### Step 6: Start Server
-
-```bash
-# Jalankan server dalam development mode
 npm run dev
-
-# Server akan running di http://localhost:3000
 ```
 
-**Expected Output:**
+**Server akan running di:** `http://localhost:5000`
 
-```
-🚀 Server running on port 3000
-✅ MongoDB Connected: localhost
-📍 Health check: http://localhost:3000/health
-💻 Environment: development
-🤖 AI Service initialized
-💳 Payment Gateway ready
-```
-
-### Step 7: Test Complete API
-
-**✅ SEMUA ENDPOINTS DARI MODUL 1-5 TERSEDIA!**
-
-Frontend & Common modules akan use endpoints ini untuk practice!
-
-**1. Health Check:**
-
-```bash
-curl http://localhost:3000/health
-```
-
-**2. Get JWT Token (Login):**
-
-```bash
-# Login dengan user dari seeder
-curl -X POST http://localhost:3000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"aila@example.com","password":"Aila123!"}'
-
-# Atau login sebagai admin
-curl -X POST http://localhost:3000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"aiman@example.com","password":"Aiman123!"}'
-
-# Save the token yang dikembalikan!
-```
-
-**3. Test AI Chatbot:**
-
-```bash
-curl -X POST http://localhost:3000/api/external/ai/ask \
-  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
-  -H "Content-Type: application/json" \
-  -d '{"question":"Vitamin apa yang bagus untuk imun tubuh?"}'
-```
-
-**Expected Response:**
-
-```json
-{
-  "success": true,
-  "answer": "Untuk meningkatkan daya tahan tubuh, saya rekomendasikan...",
-  "recommendedProducts": [
-    {
-      "productId": "...",
-      "name": "Vitamin C 1000mg",
-      "category": "Vitamin",
-      "price": 85000
-    }
-  ]
-}
-```
-
-**4. Test Kemenkes API:**
-
-```bash
-curl http://localhost:3000/api/external/kemenkes/medications?search=paracetamol \
-  -H "Authorization: Bearer YOUR_TOKEN_HERE"
-```
-
-**5. Test Payment:**
-
-```bash
-curl -X POST http://localhost:3000/api/external/payment/create \
-  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "items": [
-      {"id":"1","name":"Vitamin C","price":85000,"quantity":2}
-    ]
-  }'
-```
-
-**Response:**
-
-```json
-{
-  "success": true,
-  "orderId": "ORDER-1234567890-abc",
-  "paymentToken": "66e4fa55-fdac-4ef9-91b5-733b97d1b862",
-  "redirectUrl": "https://app.sandbox.midtrans.com/snap/v2/vtweb/..."
-}
-```
-
-Open `redirectUrl` di browser untuk simulasi payment!
+**API Documentation (Swagger):** `http://localhost:5000/api-docs`
 
 ---
 
-## 📁 Struktur Project
+## Project Structure
 
 ```
-health-ecommerce-ai-complete/
-├── README.md                    # 📖 Ini file yang sedang kamu baca
+finished-project/
+├── README.md                    # Dokumentasi lengkap
 ├── package.json                 # Dependencies & scripts
 ├── .env.example                 # Template environment variables
-├── .gitignore                   # Files to ignore
-├── server.js                    # ✅ Complete server setup
+├── server.js                    # Complete server setup
 │
 ├── config/
-│   └── database.js             # ✅ MongoDB connection (working)
+│   ├── database.js             # MongoDB connection
+│   ├── cloudinary.js           # Cloudinary configuration
+│   └── swagger.js              # API documentation
 │
 ├── controllers/
-│   └── aiController.js         # ✅ AI chatbot controller (complete)
+│   ├── aiController.js         # AI chatbot controller
+│   ├── authController.js      # Authentication controller
+│   ├── cartController.js       # Cart management controller
+│   ├── orderController.js      # Order management controller
+│   ├── productController.js   # Product CRUD controller
+│   └── uploadController.js     # Image upload controller
 │
 ├── middleware/
-│   ├── auth.js                 # ✅ JWT authentication
-│   └── authorize.js            # ✅ RBAC authorization
+│   ├── auth.js                 # JWT authentication
+│   └── authorize.js           # RBAC authorization
 │
 ├── models/
-│   └── Product.js              # ✅ Product schema (dengan kemenkesId)
+│   ├── Product.js              # Product schema
+│   ├── User.js                 # User schema (dengan cart & profilePhoto)
+│   └── Order.js                # Order schema
 │
 ├── routes/
-│   └── externalRoutes.js       # ✅ Complete routes (AI, Kemenkes, Payment)
+│   ├── authRoutes.js          # Authentication routes
+│   ├── cartRoutes.js           # Cart routes
+│   ├── externalRoutes.js       # External integrations routes
+│   ├── orderRoutes.js          # Order routes
+│   ├── productRoutes.js        # Product routes
+│   └── uploadRoutes.js         # Upload routes
 │
-└── services/
-    ├── aiService.js            # ✅ Google Gemini (with caching!)
-    ├── kemenkesService.js      # ✅ Kemenkes API (with FHIR transform)
-    └── midtransService.js      # ✅ Payment gateway (with webhook)
+├── services/
+│   ├── aiService.js           # Google Gemini (with caching!)
+│   ├── emailService.js         # Email notifications
+│   ├── kemenkesService.js      # Kemenkes API (with FHIR transform)
+│   └── midtransService.js     # Payment gateway (with webhook)
+│
+├── scripts/
+│   ├── seed.js                # Database seeder
+│   ├── seedVitamins.js        # Vitamins seeder
+│   └── listModels.js         # Model lister
+│
+└── test-*.js                  # Test scripts (webhook, email)
 ```
-
-**Legend:**
-
-- ✅ = Complete implementation & tested
-- 🆕 = New in this module
-- 🔒 = Security-critical code
 
 ---
 
-## 🗺️ Complete API Endpoints
+## Complete API Endpoints
 
-### Authentication (dari Modul 4)
+### Authentication
 
 ```
 POST   /api/auth/register      # Register user
 POST   /api/auth/login         # Login & get JWT
-GET    /api/auth/profile       # Get user profile
+GET    /api/auth/profile       # Get user profile (Protected)
+PUT    /api/auth/profile       # Update user profile (Protected)
 ```
 
-### Products (dari Modul 2-3)
+### Products
 
 ```
-GET    /api/products           # Get all products
-GET    /api/products/:id       # Get product by ID
-POST   /api/products           # Create product (Admin)
-PUT    /api/products/:id       # Update product (Admin)
-DELETE /api/products/:id       # Delete product (Admin)
+GET    /api/products           # Get all products (with filters, pagination)
+GET    /api/products/:id      # Get product by ID
+POST   /api/products           # Create product (Admin only)
+PUT    /api/products/:id       # Update product (Admin only)
+DELETE /api/products/:id       # Delete product (Admin only)
 ```
 
-### External Integrations (Modul 5) 🆕
+### Cart
 
 ```
-POST   /api/external/ai/ask                    # AI chatbot
-GET    /api/external/kemenkes/medications      # Kemenkes data
-POST   /api/external/kemenkes/sync             # Sync to DB (Admin)
-POST   /api/external/payment/create            # Create payment
-POST   /api/external/payment/webhook           # Payment callback
+GET    /api/cart               # Get user's cart (Protected)
+POST   /api/cart               # Add item to cart (Protected)
+PUT    /api/cart/:productId    # Update cart item quantity (Protected)
+DELETE /api/cart/:productId    # Remove item from cart (Protected)
 ```
 
-**Total: 13 endpoints** - Complete Health E-Commerce API!
+### Orders
+
+```
+GET    /api/orders             # Get order history (Protected, with pagination)
+GET    /api/orders/:orderId    # Get order detail (Protected)
+```
+
+### Upload
+
+```
+POST   /api/upload/product     # Upload product image (Admin only)
+POST   /api/upload/profile     # Upload profile photo (Protected)
+DELETE /api/upload/:publicId   # Delete image (Protected)
+```
+
+### External Integrations
+
+```
+POST   /api/external/ai/chat              # AI chatbot (Protected)
+GET    /api/external/kemenkes/medications # Kemenkes data (Protected)
+POST   /api/external/kemenkes/sync        # Sync to DB (Admin only)
+POST   /api/external/payment/create       # Create payment (Protected)
+POST   /api/external/payment/webhook      # Payment callback (Public)
+```
+
+**Total: 25+ endpoints** - Complete Health E-Commerce API!
+
+**Full API Documentation:** `http://localhost:5000/api-docs`
 
 ---
 
-## 🌟 Key Features Implementation
+## Key Features Implementation
 
-### 1. AI Chatbot (Google Gemini)
+### 1. Authentication System
 
-**File:** `services/aiService.js`
+**File:** `controllers/authController.js`, `routes/authRoutes.js`
 
 **Features:**
-
-- ✅ Context-aware prompts dengan product database
-- ✅ Response parsing & product extraction
-- ✅ Caching (reduce costs!)
-- ✅ Error handling & fallbacks
-- ✅ Rate limiting (10 requests/15min)
+- JWT token generation & verification
+- Password hashing dengan bcrypt
+- Protected routes dengan middleware
+- Role-based access control (Admin/User)
+- Profile management
 
 **Example Usage:**
 
 ```javascript
-const aiService = require("./services/aiService");
+// Register
+POST /api/auth/register
+Body: { name, email, password, phone, address }
 
-const result = await aiService.getHealthRecommendation(
-  "Vitamin untuk daya tahan tubuh?"
-);
+// Login
+POST /api/auth/login
+Body: { email, password }
+Response: { success: true, token: "..." }
 
-console.log(result.answer);
-console.log(result.recommendedProducts);
+// Get Profile (Protected)
+GET /api/auth/profile
+Headers: { Authorization: "Bearer <token>" }
 ```
 
-### 2. Kemenkes API Integration
+### 2. Shopping Cart API
 
-**File:** `services/kemenkesService.js`
+**File:** `controllers/cartController.js`, `routes/cartRoutes.js`
 
 **Features:**
-
-- ✅ FHIR data transformation
-- ✅ Duplicate detection (by kemenkesId)
-- ✅ Auto-sync to MongoDB
-- ✅ Retry logic for failures
+- User-specific cart (stored in database)
+- Add/Remove/Update cart items
+- Cart sync dengan frontend
+- Backward compatibility (handles users without cart field)
 
 **Example Usage:**
 
 ```javascript
-const kemenkesService = require("./services/kemenkesService");
+// Get Cart
+GET /api/cart
+Headers: { Authorization: "Bearer <token>" }
 
-// Sync official data
-const result = await kemenkesService.syncToDatabase();
-console.log(`Synced ${result.newProducts} products`);
+// Add to Cart
+POST /api/cart
+Body: { productId: "...", quantity: 2 }
+Headers: { Authorization: "Bearer <token>" }
+
+// Update Quantity
+PUT /api/cart/:productId
+Body: { quantity: 3 }
+Headers: { Authorization: "Bearer <token>" }
+
+// Remove from Cart
+DELETE /api/cart/:productId
+Headers: { Authorization: "Bearer <token>" }
 ```
 
-### 3. Midtrans Payment Gateway
+### 3. Order Management
 
-**File:** `services/midtransService.js`
+**File:** `controllers/orderController.js`, `routes/orderRoutes.js`, `models/Order.js`
 
 **Features:**
+- Order creation saat payment
+- Order history dengan pagination
+- Order detail dengan product info
+- Status tracking (pending, paid, failed, cancelled)
+- Midtrans transaction data storage
 
-- ✅ Snap API integration
-- ✅ Webhook handling
-- ✅ Signature verification (SHA512)
-- ✅ Transaction status parsing
-- ✅ Email notifications
-
-**Example Payment Flow:**
+**Example Usage:**
 
 ```javascript
-const midtransService = require('./services/midtransService');
+// Get Order History
+GET /api/orders?page=1&limit=10&status=paid
+Headers: { Authorization: "Bearer <token>" }
 
-// Create payment
-const payment = await midtransService.createTransaction({
-  orderId: 'ORDER-123',
+// Get Order Detail
+GET /api/orders/ORDER-1234567890
+Headers: { Authorization: "Bearer <token>" }
+```
+
+### 4. Cloudinary Image Upload
+
+**File:** `controllers/uploadController.js`, `routes/uploadRoutes.js`, `config/cloudinary.js`
+
+**Features:**
+- Product image upload (Admin only)
+- Profile photo upload (User)
+- Image optimization (auto resize, quality)
+- Image deletion
+- Multer + Cloudinary integration
+
+**Example Usage:**
+
+```javascript
+// Upload Product Image
+POST /api/upload/product
+Headers: { Authorization: "Bearer <admin-token>" }
+Body: FormData { image: <file> }
+
+// Upload Profile Photo
+POST /api/upload/profile
+Headers: { Authorization: "Bearer <token>" }
+Body: FormData { image: <file> }
+
+// Delete Image
+DELETE /api/upload/:publicId
+Headers: { Authorization: "Bearer <token>" }
+```
+
+### 5. AI Chatbot (Google Gemini)
+
+**File:** `services/aiService.js`, `controllers/aiController.js`
+
+**Features:**
+- Context-aware prompts dengan product database
+- Response parsing & product extraction
+- Caching (reduce costs!)
+- Error handling & fallbacks
+- Rate limiting (10 requests/15min)
+
+**Example Usage:**
+
+```javascript
+POST /api/external/ai/chat
+Headers: { Authorization: "Bearer <token>" }
+Body: { message: "Vitamin apa yang bagus untuk imun tubuh?" }
+
+Response: {
+  success: true,
+  message: "Untuk meningkatkan daya tahan tubuh...",
+  products: [
+    { _id: "...", name: "Vitamin C 1000mg", price: 85000 }
+  ]
+}
+```
+
+### 6. Midtrans Payment Gateway
+
+**File:** `services/midtransService.js`, `routes/externalRoutes.js`
+
+**Features:**
+- Snap API integration
+- Webhook handling
+- Signature verification (SHA512)
+- Transaction status parsing
+- Order status updates
+- Email notifications
+
+**Payment Flow:**
+
+1. Frontend calls `POST /api/external/payment/create`
+2. Backend creates order in database (status: "pending")
+3. Backend creates Midtrans transaction
+4. Returns `paymentUrl` to frontend
+5. User completes payment at Midtrans
+6. Midtrans sends webhook to `POST /api/external/payment/webhook`
+7. Backend updates order status (pending → paid)
+8. Backend sends confirmation email
+
+**Webhook Debugging:**
+
+```bash
+# Test webhook manually
+node test-webhook-manual.js ORDER-xxx
+```
+
+**See:** `WEBHOOK_DEBUG_GUIDE.md` untuk detail lengkap.
+
+### 7. Email Service (Nodemailer)
+
+**File:** `services/emailService.js`
+
+**Features:**
+- Payment confirmation emails
+- SMTP configuration (Gmail, SendGrid, dll)
+- HTML email templates
+- Error handling & logging
+
+**Example Usage:**
+
+```javascript
+// Automatically called when payment successful
+await emailService.sendPaymentConfirmation({
+  orderId: "ORDER-123",
+  customerEmail: "user@example.com",
   amount: 170000,
-  customerEmail: 'user@example.com',
   items: [...]
 });
+```
 
-// User pays at: payment.redirectUrl
-// Midtrans sends webhook → We update order status
+**See:** `EMAIL_SERVICE_SETUP.md` untuk setup lengkap.
+
+---
+
+## Testing
+
+### Health Check
+
+```bash
+curl http://localhost:5000/health
+```
+
+### Test Authentication
+
+```bash
+# Register
+curl -X POST http://localhost:5000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test User","email":"test@example.com","password":"Test123!","phone":"08123456789"}'
+
+# Login
+curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"aila@example.com","password":"Aila123!"}'
+
+# Save the token!
+```
+
+### Test AI Chatbot
+
+```bash
+curl -X POST http://localhost:5000/api/external/ai/chat \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{"message":"Vitamin apa yang bagus untuk imun tubuh?"}'
+```
+
+### Test Webhook
+
+```bash
+# Manual webhook test
+node test-webhook-manual.js ORDER-xxx
+```
+
+### Test Email
+
+```bash
+# Direct email test
+node test-email-direct.js
 ```
 
 ---
 
-## 🆚 Perbedaan dengan Starter Version
+## Troubleshooting
 
-| Aspect             | Starter               | Finished (Ini!)                 |
-| ------------------ | --------------------- | ------------------------------- |
-| **AI Service**     | ⚠️ Boilerplate + TODO | ✅ Complete dengan caching      |
-| **Kemenkes**       | ⚠️ Empty functions    | ✅ FHIR transformation working  |
-| **Midtrans**       | ⚠️ Template code      | ✅ Full payment flow + webhook  |
-| **Routes**         | ⚠️ Commented out      | ✅ All mounted & protected      |
-| **Error Handling** | ⚠️ Basic              | ✅ Comprehensive dengan logging |
-| **Testing**        | ❌ No examples        | ✅ Complete curl examples       |
-| **Documentation**  | ⚠️ Minimal            | ✅ Complete with examples       |
+###  "MongoDB connection failed"
 
-**Use finished when:**
-
-- ✅ Butuh reference implementation
-- ✅ Mau lihat best practices
-- ✅ Debugging starter code
-- ✅ Learning production patterns
-
-**Use starter when:**
-
-- 📝 Mau practice coding
-- 📝 Belajar step-by-step
-- 📝 Build from scratch
-
----
-
-## 🐛 Troubleshooting
-
-### ❌ "GOOGLE_AI_API_KEY not set"
-
-**Solusi:**
-
-1. Check `.env` file exists
-2. Verify `GOOGLE_AI_API_KEY=...` ada di `.env`
-3. Restart server: `Ctrl+C` → `npm run dev`
-
-### ❌ "AI service timeout"
-
-**Solusi:**
-
-- Check internet connection
-- Reduce product context (max 30 products)
-- Increase timeout di `aiService.js`:
-
-```javascript
-timeout: 30000; // 30 seconds
-```
-
-### ❌ "Invalid Midtrans signature"
-
-**Solusi:**
-
-1. Pastikan pakai **sandbox** key
-2. Check signature calculation di `midtransService.js`
-3. Format: `SHA512(orderId+statusCode+grossAmount+serverKey)`
-
-### ❌ "MongoDB connection failed"
-
-**Solusi:**
-
+**Solution:**
 ```bash
 # Check MongoDB running
 mongosh
 
-# Start if not running:
+# Start MongoDB:
 # Windows: Services → MongoDB
 # Mac: brew services start mongodb-community
 # Linux: sudo systemctl start mongod
 ```
 
-### ⚠️ Rate Limit Exceeded
+###  "GOOGLE_AI_API_KEY not set"
 
-**Expected behavior!** AI endpoint limited to 10 requests/15min.
+**Solution:**
+1. Get API key: https://ai.google.dev/
+2. Add to `.env`: `GOOGLE_AI_API_KEY=AIza...`
+3. Restart server
 
-**Solusi:**
+###  "Webhook tidak update status"
 
-- Wait 15 minutes
-- Or increase limit di `externalRoutes.js`
+**Problem:** Midtrans Sandbox tidak bisa reach `localhost`
 
----
+**Solution:**
+1. Use ngrok: `ngrok http 5000`
+2. Set webhook URL di Midtrans dashboard ke ngrok URL
+3. Or test manual: `node test-webhook-manual.js ORDER-xxx`
 
-## 📊 Project Evolution (Modul 1-5)
+**See:** `WEBHOOK_DEBUG_GUIDE.md` untuk detail lengkap.
 
-### Modul 1: JavaScript & OOP
+###  "Email tidak terkirim"
 
-- ✅ Class-based architecture
-- ✅ Service layer pattern
-- ✅ Helper utilities
+**Solution:**
+1. Check SMTP credentials di `.env`
+2. For Gmail: Use App Password (not regular password)
+3. Test email: `node test-email-direct.js`
 
-### Modul 2: Database
+**See:** `EMAIL_SERVICE_SETUP.md` untuk detail lengkap.
 
-- ✅ Product & User models
-- ✅ MongoDB connection
-- ✅ Mongoose schemas
+###  "User not found" di cart operations
 
-### Modul 3: Express API
-
-- ✅ CRUD endpoints
-- ✅ Middleware system
-- ✅ Error handling
-
-### Modul 4: Authentication
-
-- ✅ JWT auth
-- ✅ RBAC
-- ✅ Security (OWASP)
-
-### Modul 5: Integration (THIS!)
-
-- ✅ AI chatbot
-- ✅ Government API
-- ✅ Payment gateway
-- ✅ Webhooks
-- ✅ Email service
-
-**= COMPLETE PRODUCTION-READY BACKEND!** 🎉
+**Solution:**
+- Middleware sudah handle `req.user.id` dari JWT
+- Pastikan token valid dan user exists
+- Check `middleware/auth.js`
 
 ---
 
-## 🧪 Advanced Testing
+## Documentation Files
 
-### Test Webhook Locally
-
-Since Midtrans can't reach localhost, use **ngrok**:
-
-```bash
-# Install ngrok
-npm install -g ngrok
-
-# Expose localhost
-ngrok http 3000
-
-# Copy ngrok URL (e.g., https://abc123.ngrok.io)
-# Set di Midtrans dashboard:
-# Settings → Webhook URL: https://abc123.ngrok.io/api/external/payment/webhook
-```
-
-Now make test payment → Midtrans will call your webhook!
-
-### Load Testing dengan k6
-
-```bash
-# Install k6
-# Windows: choco install k6
-# Mac: brew install k6
-# Linux: apt install k6
-
-# Run basic load test
-k6 run tests/load-test.js
-```
+- **WEBHOOK_DEBUG_GUIDE.md** - Complete webhook debugging guide
+- **EMAIL_SERVICE_SETUP.md** - Email service setup & troubleshooting
+- **QUICK_EMAIL_FIX.md** - Quick fixes untuk email issues
+- **RESTART_SERVER_GUIDE.md** - Server restart instructions
 
 ---
 
-## 📚 Learning Resources
+## Deployment
 
-**API Docs:**
-
-- [Google Gemini](https://ai.google.dev/docs)
-- [Midtrans](https://docs.midtrans.com/)
-- [Kemenkes](https://satusehat.kemkes.go.id/platform/docs/)
-
-**Tools:**
-
-- [Postman](https://www.postman.com/) - API testing
-- [MongoDB Compass](https://www.mongodb.com/products/compass) - Database GUI
-- [ngrok](https://ngrok.com/) - Webhook testing
-
----
-
-## 🚀 Deployment
-
-Ready untuk production? Deploy ke:
-
-**Railway:**
+### Railway
 
 ```bash
 npm install -g @railway/cli
@@ -684,64 +576,65 @@ railway init
 railway up
 ```
 
-**Heroku:**
+### Heroku
 
 ```bash
-heroku create health-ecommerce-ai
+heroku create health-ecommerce-api
 git push heroku main
-heroku config:set GOOGLE_AI_API_KEY=...
-```
-
-**Vercel:**
-
-```bash
-npm install -g vercel
-vercel
+heroku config:set MONGODB_URI=...
+heroku config:set JWT_SECRET=...
 ```
 
 ---
 
-## 💡 Best Practices Implemented
+## Best Practices Implemented
 
-1. ✅ **Environment Variables** - All secrets in `.env`
-2. ✅ **Error Handling** - Try-catch di semua async functions
-3. ✅ **Rate Limiting** - Prevent API abuse
-4. ✅ **Caching** - Reduce external API costs
-5. ✅ **Retry Logic** - Exponential backoff untuk failures
-6. ✅ **Logging** - Comprehensive logs untuk debugging
-7. ✅ **Security** - Signature verification, JWT, RBAC
-8. ✅ **Validation** - Input validation di semua endpoints
-
----
-
-## 🆘 Butuh Bantuan?
-
-- **Questions?** Open issue di GitHub
-- **Bugs?** Create bug report dengan error logs
-- **Improvements?** Submit pull request!
+1. **Environment Variables** - All secrets in `.env`
+2. **Error Handling** - Try-catch di semua async functions
+3. **Rate Limiting** - Prevent API abuse
+4. **Caching** - Reduce external API costs
+5. **Retry Logic** - Exponential backoff untuk failures
+6. **Logging** - Comprehensive logs untuk debugging
+7. **Security** - Signature verification, JWT, RBAC
+8. **Validation** - Input validation di semua endpoints
+9. **Database Indexing** - Optimized queries
+10. **Image Optimization** - Auto resize & quality
 
 ---
 
-**🎉 Congratulations!**
+## Support
+
+**Questions?** Open issue di GitHub
+
+**Bugs?** Create bug report dengan error logs
+
+**Improvements?** Submit pull request!
+
+---
+
+**Congratulations!**
 
 Kamu sekarang punya **complete production-ready backend** dengan:
 
-- AI capabilities
-- Government data integration
+- Full authentication system
+- Shopping cart management
 - Real payment processing
-- Production-grade security
+- AI-powered recommendations
+- Image upload & management
+- Order tracking
+- Email notifications
 
-**Next:** Build React frontend untuk consume API ini! 🎨
+**Next:** Build React frontend untuk consume API ini!
 
 ---
 
-**📁 Repository Info:**
+**Repository Info:**
 
-- **Name:** `health-ecommerce-ai-complete`
+- **Name:** `health-ecommerce-external-integration/finished-project`
 - **Type:** Finished/Reference Implementation
-- **Starter Version:** `health-ecommerce-ai-integration`
+- **Starter Version:** `health-ecommerce-external-integration/starter-project`
 
-**Happy Coding! 🚀**
+**Happy Coding!**
 
-_Modul 5 - External API Integration (Complete)_  
+_Modul 1-6 - Complete Backend Implementation_  
 _Health E-Commerce Backend Series_

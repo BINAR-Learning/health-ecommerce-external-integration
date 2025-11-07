@@ -29,7 +29,7 @@ class EmailService {
 
     try {
       // Create transporter
-      this.transporter = nodemailer.createTransporter({
+      this.transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST || "smtp.gmail.com",
         port: parseInt(process.env.SMTP_PORT) || 587,
         secure: process.env.SMTP_SECURE === 'true' || false, // true for 465, false for other ports
@@ -54,12 +54,23 @@ class EmailService {
    * @returns {Promise}
    */
   async sendPaymentConfirmation(order) {
+    console.log("📧 Attempting to send payment confirmation email:", {
+      orderId: order.orderId,
+      customerEmail: order.customerEmail,
+      amount: order.amount,
+      hasTransporter: !!this.transporter,
+    });
+
     if (!this.transporter) {
-      console.warn("Email not sent: transporter not configured");
+      console.warn("⚠️  Email not sent: transporter not configured");
+      console.warn("   Set SMTP_USER and SMTP_PASS in .env file");
+      console.warn("   See EMAIL_SERVICE_SETUP.md for instructions");
       return { success: false, message: "Email service not configured" };
     }
 
     try {
+      console.log("✉️  Composing email...");
+
       const mailOptions = {
         from: this.from,
         to: order.customerEmail,
@@ -195,13 +206,33 @@ class EmailService {
         `,
       };
 
-      await this.transporter.sendMail(mailOptions);
-      console.log("✅ Payment confirmation email sent to:", order.customerEmail);
+      console.log("📤 Sending email via SMTP...");
+      const info = await this.transporter.sendMail(mailOptions);
       
-      return { success: true };
+      console.log("✅ Payment confirmation email sent successfully!");
+      console.log("   To:", order.customerEmail);
+      console.log("   Message ID:", info.messageId);
+      console.log("   Response:", info.response);
+      
+      return { success: true, messageId: info.messageId };
     } catch (error) {
-      console.error("❌ Email Error:", error.message);
-      return { success: false, error: error.message };
+      console.error("❌ Email Error:", {
+        message: error.message,
+        code: error.code,
+        response: error.response,
+        command: error.command,
+      });
+      
+      // Provide specific error messages
+      if (error.code === 'EAUTH') {
+        console.error("   → Authentication failed. Check SMTP_USER and SMTP_PASS");
+        console.error("   → For Gmail, use App Password (not regular password)");
+      } else if (error.code === 'ECONNECTION') {
+        console.error("   → Cannot connect to SMTP server");
+        console.error("   → Check SMTP_HOST and SMTP_PORT");
+      }
+      
+      return { success: false, error: error.message, code: error.code };
     }
   }
 

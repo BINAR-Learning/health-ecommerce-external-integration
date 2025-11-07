@@ -24,7 +24,12 @@ const express = require('express');
 // const connectDB = require('./config/database');
 
 // TODO: Import routes
+// const productRoutes = require('./routes/productRoutes');
+// const authRoutes = require('./routes/authRoutes');
+// const cartRoutes = require('./routes/cartRoutes');
+// const uploadRoutes = require('./routes/uploadRoutes');
 // const externalRoutes = require('./routes/externalRoutes');
+// const orderRoutes = require('./routes/orderRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -77,7 +82,12 @@ app.get('/health', (req, res) => {
 // ==========================================
 // TODO: Mount Routes
 // ==========================================
-// app.use('/api/external', externalRoutes);
+// app.use('/api/products', productRoutes);     // Product CRUD
+// app.use('/api/auth', authRoutes);            // Authentication
+// app.use('/api/cart', cartRoutes);            // Shopping Cart
+// app.use('/api/upload', uploadRoutes);        // Image Upload
+// app.use('/api/external', externalRoutes);    // External Integrations (AI, Payment)
+// app.use('/api/orders', orderRoutes);         // Order History
 
 // ==========================================
 // TODO: Error Handler

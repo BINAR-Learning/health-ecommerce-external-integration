@@ -64,6 +64,11 @@ class MidtransService {
         throw new Error(`Invalid gross_amount: ${grossAmount}`);
       }
 
+      // Determine callback URLs based on environment
+      const baseURL = this.isProduction 
+        ? process.env.FRONTEND_URL || 'https://yourdomain.com'
+        : 'http://localhost:3000';
+
       const parameter = {
         transaction_details: {
           order_id: String(orderData.orderId),
@@ -75,6 +80,11 @@ class MidtransService {
           phone: orderData.customerPhone || "",
         },
         item_details: itemDetails,
+        callbacks: {
+          finish: `${baseURL}/order-success?order_id=${orderData.orderId}`,
+          error: `${baseURL}/checkout?error=payment_failed`,
+          pending: `${baseURL}/order-success?order_id=${orderData.orderId}&status=pending`,
+        },
       };
 
       const authString = Buffer.from(`${this.serverKey}:`).toString("base64");

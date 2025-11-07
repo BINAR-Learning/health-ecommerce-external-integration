@@ -13,10 +13,10 @@ cloudinary.config({
 
 // Validate configuration
 if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
-  console.warn("⚠️  Cloudinary credentials not set. Image upload will not work.");
+  console.warn("Cloudinary credentials not set. Image upload will not work.");
   console.warn("   Get free account at: https://cloudinary.com/");
 } else {
-  console.log("✅ Cloudinary configured:", process.env.CLOUDINARY_CLOUD_NAME);
+  console.log("Cloudinary configured:", process.env.CLOUDINARY_CLOUD_NAME);
 }
 
 module.exports = cloudinary;
