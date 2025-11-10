@@ -26,6 +26,10 @@ const productSchema = new mongoose.Schema(
     description: String,
     manufacturer: String,
     kemenkesId: String, // For Kemenkes integration
+    image: {
+      type: String,
+      default: null,
+    },
     isActive: {
       type: Boolean,
       default: true,

@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const cloudinary = require("../config/cloudinary");
 
 // Generate JWT Token
 const generateToken = (userId, email, role) => {
@@ -153,6 +154,7 @@ exports.getProfile = async (req, res) => {
         role: user.role,
         phone: user.phone,
         address: user.address,
+        profilePhoto: user.profilePhoto,
         createdAt: user.createdAt,
       },
     });
@@ -160,6 +162,72 @@ exports.getProfile = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Gagal mengambil profil",
+    });
+  }
+};
+
+// Update Profile (Protected)
+exports.updateProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User tidak ditemukan",
+      });
+    }
+
+    // Extract update data
+    const updateData = { ...req.body };
+    
+    // Handle image upload if file exists
+    if (req.file) {
+      // Delete old photo from Cloudinary if exists
+      if (user.profilePhoto && user.profilePhoto.includes('cloudinary')) {
+        try {
+          const urlParts = user.profilePhoto.split('/');
+          const publicIdWithExt = urlParts[urlParts.length - 1];
+          const publicId = publicIdWithExt.split('.')[0];
+          const folderPath = `health-ecommerce/profiles/${publicId}`;
+          await cloudinary.uploader.destroy(folderPath);
+        } catch (err) {
+          console.warn("Failed to delete old profile photo:", err.message);
+        }
+      }
+      updateData.profilePhoto = req.file.path; // New Cloudinary URL
+    }
+
+    // Update user (exclude password and email from direct update)
+    if (updateData.password) {
+      user.password = updateData.password; // Will be hashed by pre-save hook
+    }
+    if (updateData.name) user.name = updateData.name;
+    if (updateData.phone) user.phone = updateData.phone;
+    if (updateData.address) user.address = updateData.address;
+    if (updateData.profilePhoto) user.profilePhoto = updateData.profilePhoto;
+    
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Profil berhasil diupdate",
+      data: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        phone: user.phone,
+        address: user.address,
+        profilePhoto: user.profilePhoto,
+      },
+    });
+  } catch (error) {
+    console.error("Update profile error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Gagal mengupdate profil",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 };

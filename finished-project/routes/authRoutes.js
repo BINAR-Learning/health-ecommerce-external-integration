@@ -1,7 +1,34 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("../config/cloudinary");
 const authController = require("../controllers/authController");
 const { authenticateToken } = require("../middleware/auth");
+
+// Cloudinary Storage untuk Profile Photos
+const profileStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "health-ecommerce/profiles",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    transformation: [{ width: 400, height: 400, crop: "fill", gravity: "face", quality: "auto" }],
+  },
+});
+
+// Multer middleware untuk profile photos
+const uploadProfile = multer({
+  storage: profileStorage,
+  limits: {
+    fileSize: 2 * 1024 * 1024, // 2MB max for profiles
+  },
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype.startsWith('image/')) {
+      return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+  },
+});
 
 /**
  * @swagger
@@ -100,6 +127,63 @@ router.post("/login", authController.login);
  *         description: User not found
  */
 router.get("/profile", authenticateToken, authController.getProfile);
+
+/**
+ * @swagger
+ * /api/auth/profile:
+ *   put:
+ *     summary: Update current user profile
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *                 format: password
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Profile updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Profil berhasil diupdate"
+ *                 data:
+ *                   $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+router.put(
+  "/profile",
+  authenticateToken,
+  uploadProfile.single("image"),
+  authController.updateProfile
+);
 
 module.exports = router;
 

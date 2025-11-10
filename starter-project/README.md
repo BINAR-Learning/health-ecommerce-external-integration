@@ -36,10 +36,12 @@ starter-project/
 ├── server.js                    # ⚠️ TODO: Setup server
 │
 ├── config/
-│   └── database.js             # ⚠️ TODO: MongoDB connection
+│   ├── database.js             # ⚠️ TODO: MongoDB connection
+│   └── cloudinary.js          # ⚠️ TODO: Cloudinary configuration
 │
 ├── controllers/
-│   └── aiController.js         # ⚠️ TODO: AI controller
+│   ├── aiController.js         # ⚠️ TODO: AI controller
+│   └── uploadController.js     # ⚠️ TODO: Image upload controller
 │
 ├── middleware/
 │   ├── auth.js                 # ⚠️ TODO: JWT authentication
@@ -50,7 +52,8 @@ starter-project/
 │   └── User.js                 # ✅ Basic schema (expand jika perlu)
 │
 ├── routes/
-│   └── externalRoutes.js       # ⚠️ TODO: External API routes
+│   ├── externalRoutes.js       # ⚠️ TODO: External API routes
+│   └── uploadRoutes.js        # ⚠️ TODO: Image upload routes
 │
 └── services/
     ├── aiService.js            # ⚠️ TODO: Google Gemini integration
@@ -96,6 +99,10 @@ GOOGLE_AI_API_KEY=AIza...your-key-here
 MIDTRANS_SERVER_KEY=SB-Mid-server-...
 MIDTRANS_CLIENT_KEY=SB-Mid-client-...
 MIDTRANS_IS_PRODUCTION=false
+
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
 ```
 
 ### Step 3: Start MongoDB
@@ -180,6 +187,28 @@ npm run dev
   - [ ] Call AI service
   - [ ] Return formatted response
 
+### Phase 5: Image Upload (Cloudinary)
+
+- [ ] **Cloudinary Config (`config/cloudinary.js`)**
+  - [ ] Install cloudinary package
+  - [ ] Configure with environment variables
+  - [ ] Validate configuration
+  - [ ] Export cloudinary instance
+
+- [ ] **Upload Routes (`routes/uploadRoutes.js`)**
+  - [ ] Setup multer with CloudinaryStorage
+  - [ ] Create product image storage (800x800px)
+  - [ ] Create profile photo storage (400x400px)
+  - [ ] POST /product - Upload product image (Admin only)
+  - [ ] POST /profile - Upload profile photo (Protected)
+  - [ ] DELETE /:publicId - Delete image (Protected)
+
+- [ ] **Upload Controller (`controllers/uploadController.js`)**
+  - [ ] Implement uploadProductImage
+  - [ ] Implement uploadProfilePhoto (update user model)
+  - [ ] Implement deleteImage
+  - [ ] Error handling
+
 ---
 
 ## 🎓 Learning Path
@@ -209,7 +238,35 @@ npm run dev
 3. Setup Midtrans payment
 4. Test payment creation
 
-### Step 5: Test Everything
+### Step 5: Implement Image Upload
+
+1. **Setup Cloudinary:**
+   - Install: `npm install cloudinary multer multer-storage-cloudinary`
+   - Get free account: https://cloudinary.com/
+   - Add credentials to `.env`:
+     ```
+     CLOUDINARY_CLOUD_NAME=your-cloud-name
+     CLOUDINARY_API_KEY=your-api-key
+     CLOUDINARY_API_SECRET=your-api-secret
+     ```
+   - Configure `config/cloudinary.js`
+
+2. **Implement Upload Routes:**
+   - Setup multer with CloudinaryStorage
+   - Create routes for product and profile upload
+   - Add authentication middleware
+
+3. **Implement Upload Controller:**
+   - Handle file uploads
+   - Update user profile photo
+   - Delete images from Cloudinary
+
+4. **Test Upload Endpoints:**
+   - Test product image upload (Admin)
+   - Test profile photo upload (User)
+   - Test image deletion
+
+### Step 6: Test Everything
 
 1. Test semua endpoints
 2. Fix bugs

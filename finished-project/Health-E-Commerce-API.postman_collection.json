@@ -186,6 +186,68 @@
 						"description": "Get profil user yang sedang login. Memerlukan JWT token (Bearer Token)."
 					},
 					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "John Doe Updated",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "081234567890",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "Jl. Merdeka No. 123, Jakarta",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "NewPassword123!",
+									"type": "text",
+									"description": "New password (optional). Will be hashed automatically."
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": [],
+									"description": "Profile photo (JPG, PNG, WEBP). Max 2MB. Optional. Will be auto-cropped to 400x400px with face detection. Old photo will be deleted if new one is uploaded."
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"profile"
+							]
+						},
+						"description": "Update profil user dengan optional image upload. Memerlukan JWT token (Bearer Token).\n\n**All fields are optional (partial update):**\n- name: Update nama\n- phone: Update nomor telepon\n- address: Update alamat\n- password: Update password (akan di-hash otomatis)\n- image: Upload profile photo\n\n**Note:** Jika upload image baru, old photo akan otomatis dihapus dari Cloudinary."
+					},
+					"response": []
 				}
 			],
 			"description": "Endpoints untuk authentication dan authorization"
@@ -279,15 +341,52 @@
 							]
 						},
 						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
+						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"Vitamin C 1000mg\",\n  \"category\": \"Vitamin\",\n  \"price\": 85000,\n  \"stock\": 50,\n  \"description\": \"Suplemen vitamin C untuk meningkatkan daya tahan tubuh\",\n  \"manufacturer\": \"PT Sehat Sejahtera\",\n  \"kemenkesId\": \"KEM-123456\",\n  \"isActive\": true\n}"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Vitamin C 1000mg",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Vitamin",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "85000",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "50",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Suplemen vitamin C untuk meningkatkan daya tahan tubuh",
+									"type": "text"
+								},
+								{
+									"key": "manufacturer",
+									"value": "PT Sehat Sejahtera",
+									"type": "text"
+								},
+								{
+									"key": "isActive",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": [],
+									"description": "Product image (JPG, PNG, WEBP). Max 5MB. Optional. Will be auto-resized to 800x800px."
+								}
+							]
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/products",
@@ -299,7 +398,7 @@
 								"products"
 							]
 						},
-						"description": "Create produk baru. **Hanya Admin** yang bisa membuat produk. Memerlukan Bearer Token dengan role admin.\n\n**Required fields:** name, category, price, stock\n\n**Category options:** Vitamin, Supplement, Medical Equipment, Medicine, Other"
+						"description": "Create produk baru dengan optional image upload. **Hanya Admin** yang bisa membuat produk. Memerlukan Bearer Token dengan role admin.\n\n**Required fields:** name, category, price, stock\n\n**Optional fields:** description, manufacturer, isActive, image\n\n**Category options:** Vitamin, Supplement, Medical Equipment, Medicine, Other\n\n**Image:** Upload product image (JPG, PNG, WEBP). Max 5MB. Will be auto-resized to 800x800px."
 					},
 					"response": []
 				},
@@ -317,15 +416,37 @@
 							]
 						},
 						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
+						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"Vitamin C 1000mg Updated\",\n  \"price\": 90000,\n  \"stock\": 60,\n  \"description\": \"Updated description\"\n}"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Vitamin C 1000mg Updated",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "90000",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "60",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Updated description",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": [],
+									"description": "New product image (JPG, PNG, WEBP). Max 5MB. Optional. Old image will be deleted if new one is uploaded."
+								}
+							]
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/products/:id",
@@ -345,7 +466,7 @@
 								}
 							]
 						},
-						"description": "Update produk. **Hanya Admin** yang bisa update produk. Semua field optional (partial update)."
+						"description": "Update produk dengan optional image upload. **Hanya Admin** yang bisa update produk. Semua field optional (partial update).\n\n**Note:** Jika upload image baru, old image akan otomatis dihapus dari Cloudinary."
 					},
 					"response": []
 				},

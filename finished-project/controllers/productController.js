@@ -1,4 +1,5 @@
 const Product = require("../models/Product");
+const cloudinary = require("../config/cloudinary");
 
 // Get All Products with Pagination
 exports.getAllProducts = async (req, res) => {
@@ -95,7 +96,15 @@ exports.getProductById = async (req, res) => {
 // Create Product (Admin only)
 exports.createProduct = async (req, res) => {
   try {
-    const product = await Product.create(req.body);
+    // Extract product data from req.body
+    const productData = { ...req.body };
+    
+    // Handle image upload if file exists
+    if (req.file) {
+      productData.image = req.file.path; // Cloudinary URL
+    }
+
+    const product = await Product.create(productData);
 
     res.status(201).json({
       success: true,
@@ -115,17 +124,38 @@ exports.createProduct = async (req, res) => {
 // Update Product (Admin only)
 exports.updateProduct = async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-
+    const product = await Product.findById(req.params.id);
+    
     if (!product) {
       return res.status(404).json({
         success: false,
         message: "Produk tidak ditemukan",
       });
     }
+
+    // Extract update data
+    const updateData = { ...req.body };
+    
+    // Handle image upload if file exists
+    if (req.file) {
+      // Delete old image from Cloudinary if exists
+      if (product.image && product.image.includes('cloudinary')) {
+        try {
+          const urlParts = product.image.split('/');
+          const publicIdWithExt = urlParts[urlParts.length - 1];
+          const publicId = publicIdWithExt.split('.')[0];
+          const folderPath = `health-ecommerce/products/${publicId}`;
+          await cloudinary.uploader.destroy(folderPath);
+        } catch (err) {
+          console.warn("Failed to delete old product image:", err.message);
+        }
+      }
+      updateData.image = req.file.path; // New Cloudinary URL
+    }
+
+    // Update product
+    Object.assign(product, updateData);
+    await product.save();
 
     res.json({
       success: true,
