@@ -469,6 +469,71 @@ const options = {
             },
           },
         },
+        // Upload Schemas
+        UploadResponse: {
+          type: "object",
+          properties: {
+            success: {
+              type: "boolean",
+              example: true,
+            },
+            message: {
+              type: "string",
+              example: "Image uploaded successfully",
+            },
+            imageUrl: {
+              type: "string",
+              format: "uri",
+              description: "Cloudinary image URL",
+              example: "https://res.cloudinary.com/your-cloud/image/upload/v1234567890/health-ecommerce/products/abc123.jpg",
+            },
+            filename: {
+              type: "string",
+              example: "product-image-1234567890",
+            },
+            publicId: {
+              type: "string",
+              description: "Cloudinary public ID for deletion",
+              example: "health-ecommerce/products/abc123",
+            },
+          },
+        },
+        ProfileUploadResponse: {
+          type: "object",
+          properties: {
+            success: {
+              type: "boolean",
+              example: true,
+            },
+            message: {
+              type: "string",
+              example: "Profile photo updated successfully",
+            },
+            imageUrl: {
+              type: "string",
+              format: "uri",
+              description: "Cloudinary image URL",
+            },
+            user: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                },
+                name: {
+                  type: "string",
+                },
+                email: {
+                  type: "string",
+                },
+                profilePhoto: {
+                  type: "string",
+                  format: "uri",
+                },
+              },
+            },
+          },
+        },
       },
     },
     tags: [
@@ -495,6 +560,10 @@ const options = {
       {
         name: "Payment",
         description: "Midtrans payment gateway integration",
+      },
+      {
+        name: "Upload",
+        description: "Cloudinary image upload endpoints",
       },
     ],
   },
